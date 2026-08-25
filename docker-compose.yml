@@ -1,0 +1,16 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app        # live-mount your source code into the container
+      - /app/node_modules  # but keep the container's own node_modules (Linux binaries)
+    env_file:
+      - .env
+    environment:
+      - CHOKIDAR_USEPOLLING=true  # reliable file-change detection through the volume mount
+      - WDS_SOCKET_PORT=0         # fixes the dev-server's hot-reload websocket in Docker
+    stdin_open: true
